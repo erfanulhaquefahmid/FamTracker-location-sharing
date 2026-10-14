@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Centered within 66dp safe zone (21dp to 87dp) -->
+    <!-- Location Pin Outer Shield -->
+    <path
+        android:pathData="M54,23 C42.95,23 34,31.95 34,43 C34,57.5 54,77 54,77 C54,77 74,57.5 74,43 C74,31.95 65.05,23 54,23 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="34"
+                android:startY="23"
+                android:endX="74"
+                android:endY="77"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00F0FF" />
+                <item android:offset="1.0" android:color="#4361EE" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Inner Dark Circle for Contrast -->
+    <path
+        android:pathData="M54,42 m-13,0 a13,13 0 1,0 26,0 a13,13 0 1,0 -26,0"
+        android:fillColor="#0D1B2A" />
+    <!-- Family Silhouette: Parent & Child Icons inside Pin -->
+    <!-- Adult 1 Head -->
+    <path
+        android:pathData="M50.5,37 m-3.2,0 a3.2,3.2 0 1,0 6.4,0 a3.2,3.2 0 1,0 -6.4,0"
+        android:fillColor="#FFFFFF" />
+    <!-- Adult 1 Body -->
+    <path
+        android:pathData="M44.5,47.5 C44.5,44 47.5,42.5 50.5,42.5 C53.5,42.5 56.5,44 56.5,47.5 Z"
+        android:fillColor="#FFFFFF" />
+    <!-- Child Head -->
+    <path
+        android:pathData="M58,39.5 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0"
+        android:fillColor="#00F0FF" />
+    <!-- Child Body -->
+    <path
+        android:pathData="M53.5,47.5 C53.5,44.8 55.8,43.8 58,43.8 C60.2,43.8 62.5,44.8 62.5,47.5 Z"
+        android:fillColor="#00F0FF" />
+    <!-- Ground Radar Pulse Ring at pin base -->
+    <path
+        android:pathData="M54,80 C44,80 38,82.5 38,84 C38,85.5 44,88 54,88 C64,88 70,85.5 70,84 C70,82.5 64,80 54,80 Z"
+        android:fillColor="#2200F0FF" />
+</vector>

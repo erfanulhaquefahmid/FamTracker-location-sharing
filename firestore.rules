@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Deny all by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isUser(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isFamilyMember(familyId) {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/families/$(familyId)/members/$(request.auth.uid));
+    }
+
+    function isValidLocation(data) {
+      return data.latitude is number && data.latitude >= -90.0 && data.latitude <= 90.0 &&
+             data.longitude is number && data.longitude >= -180.0 && data.longitude <= 180.0 &&
+             data.accuracyMeters is number && data.accuracyMeters >= 0.0 && data.accuracyMeters < 5000.0 &&
+             data.capturedAt is int && data.capturedAt > 0 &&
+             data.uid == request.auth.uid;
+    }
+
+    match /families/{familyId} {
+      // Family metadata can be read by approved members
+      allow read: if isFamilyMember(familyId);
+      // Family creation: authenticated user becomes owner
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
+      // Updates only by owner
+      allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+
+      // Members subcollection
+      match /members/{memberUid} {
+        allow read: if isFamilyMember(familyId);
+        // User can add themselves if authorized or admin adds
+        allow create: if isUser(memberUid);
+        // User can update their own sharing status
+        allow update: if isUser(memberUid);
+        // Member can leave, or owner can remove
+        allow delete: if isUser(memberUid) || 
+          get(/databases/$(database)/documents/families/$(familyId)).data.ownerUid == request.auth.uid;
+
+        // History subcollection (Immutable captured points)
+        match /history/{eventId} {
+          allow read: if isFamilyMember(familyId);
+          // Only the member can upload their own location events
+          allow create: if isUser(memberUid) && isValidLocation(request.resource.data);
+          // Immutable: once written, historical locations cannot be modified
+          allow update, delete: if false;
+        }
+      }
+
+      // Latest location document per member
+      match /latest/{memberUid} {
+        allow read: if isFamilyMember(familyId);
+        // Only member can update, and monotonic timestamp check ensures old points don't overwrite newer
+        allow create: if isUser(memberUid) && isValidLocation(request.resource.data);
+        allow update: if isUser(memberUid) && isValidLocation(request.resource.data) &&
+          (!('capturedAt' in resource.data) || request.resource.data.capturedAt >= resource.data.capturedAt);
+      }
+
+      // Invitations
+      match /invitations/{invitationId} {
+        allow read: if isFamilyMember(familyId) || isAuthenticated();
+        allow create: if isFamilyMember(familyId);
+        allow delete: if isFamilyMember(familyId);
+      }
+    }
+  }
+}

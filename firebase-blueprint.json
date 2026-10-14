@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "Family": {
+      "collection": "families",
+      "fields": {
+        "familyId": "string",
+        "name": "string",
+        "ownerUid": "string",
+        "inviteCode": "string",
+        "createdAt": "timestamp"
+      }
+    },
+    "FamilyMember": {
+      "collection": "families/{familyId}/members",
+      "fields": {
+        "uid": "string",
+        "displayName": "string",
+        "role": "string",
+        "isSharing": "boolean",
+        "lastSeenAt": "timestamp"
+      }
+    },
+    "LocationEvent": {
+      "collection": "families/{familyId}/members/{uid}/history",
+      "fields": {
+        "eventId": "string",
+        "uid": "string",
+        "familyId": "string",
+        "latitude": "number",
+        "longitude": "number",
+        "accuracyMeters": "number",
+        "capturedAt": "integer",
+        "recordedAt": "integer",
+        "provider": "string",
+        "uploadedAt": "timestamp"
+      }
+    },
+    "LatestLocation": {
+      "collection": "families/{familyId}/latest",
+      "fields": {
+        "uid": "string",
+        "latitude": "number",
+        "longitude": "number",
+        "accuracyMeters": "number",
+        "capturedAt": "integer",
+        "uploadedAt": "timestamp"
+      }
+    }
+  }
+}

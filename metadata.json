@@ -1,0 +1,6 @@
+{
+  "name": "FamTrack",
+  "description": "Consensual family location-sharing app with offline-first Room persistence, high-accuracy GPS tracking, and private Cloud Firestore sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
